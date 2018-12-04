@@ -15,6 +15,7 @@ import (
 
 	// "os"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	// "github.com/gin-contrib/logger"
@@ -22,17 +23,15 @@ import (
 	// "github.com/rs/zerolog/log"
 )
 
-const (
-	hostName = "localhost:8080"
-	dialURL  = "localhost:27017"
-	dbName   = "shortenurl"
-	cURLSet  = "urlset"
-)
 
 var (
 	globalS             *mgo.Session
 	recaptchaPublicKey  string
 	recaptchaPrivateKey string
+	hostName string
+	dialURL string
+	dbName string
+	dbCollection string
 
 	// rxURL   = regexp.MustCompile(`^/regexp\d*`)
 )
@@ -91,7 +90,7 @@ func redirectURL(c *gin.Context) {
 		return
 	}
 	var shortenURL *ShortenURL
-	collection := globalS.DB(dbName).C(cURLSet)
+	collection := globalS.DB(dbName).C(dbCollection)
 	err := collection.FindId(bson.ObjectIdHex(encodeString)).One(&shortenURL)
 	if err != nil {
 		c.JSON(200, gin.H{
@@ -202,7 +201,7 @@ func urlRequest(c *gin.Context) {
 		return
 	}
 
-	collection := globalS.DB(dbName).C(cURLSet)
+	collection := globalS.DB(dbName).C(dbCollection)
 	err = collection.Find(bson.M{"url": shortenURL.OriginalURL}).One(&shortenURL)
 	if err == nil {
 		c.JSON(200, gin.H{
@@ -264,8 +263,23 @@ func initArgs() {
 	recaptchaPrivateKey = os.Args[2]
 }
 
+func loadConfig() {
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig() // Find and read the config file
+	if err != nil { // Handle errors reading the config file
+		panic(fmt.Errorf("Fatal error config file: %s", err))
+	}
+
+	hostName = viper.GetString("hostname")
+	dialURL = viper.GetString("mongodb.dialurl")
+	dbName = viper.GetString("mongodb.dbname")
+	dbCollection = viper.GetString("mongodb.collection")
+}
+
 func main() {
 	initArgs()
+	loadConfig()
 	// initLog()
 	globalS = getMongoDBInstance()
 	defer func() {
@@ -273,7 +287,7 @@ func main() {
 			globalS.Close()
 		}
 	}()
-	collection := globalS.DB(dbName).C(cURLSet)
+	collection := globalS.DB(dbName).C(dbCollection)
 	collection.RemoveAll(nil)
 	ginEngine().Run() // listen and serve on 0.0.0.0:8080
 }

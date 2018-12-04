@@ -1,0 +1,8 @@
+{
+    "hostname": "localhost:8080",
+    "mongodb": {
+        "dialurl": "localhost:27017",
+        "dbname": "shortenurl",
+        "collection": "urlset"
+    }
+}
