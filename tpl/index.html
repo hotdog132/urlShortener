@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="https://www.google.com/recaptcha/api.js?render=6LfTc3wUAAAAAGA8DG7kbgsCjgGaWyo9v45PI1Oi"></script>
+        <script>
+            var publicKey = {{ .recaptchaPublicKey }};
+            grecaptcha.ready(function() {
+                grecaptcha.execute(publicKey, {action: 'shortenurl'})
+                .then(function(token) {
+                    document.getElementById('token').value = token;
+                    // alert(document.getElementsByName('token').value);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <form action='/shortenUrl' method='post'>
+            <input type='hidden' name='token' id='token' />
+            <input type='text' name='OriginalURL' />
+            <input type='submit' value='Submit' />
+        </form>
+    </body>
+</html>
