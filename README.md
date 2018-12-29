@@ -1,8 +1,23 @@
-# urlShortener
+# URL Shortener DEMO using GO
+
+> Database: MongoDB
+> Use Recaptcha v3 for robot checking
+> Use gRPC for services internal communication
+> Use Docker to launch microservices
+
+### ToDo
+- [x] Build prototype
+- [x] Recaptcha v3
+- [] Shorten URL algorithm
+- [x] Docker settings
+- [] gRPC communication
+
+### Addition
+- [] Switch DB to Redis
 
 
 
-steps:
+### steps:
 
 build urlshortener docker image:
 docker build -t urlshortener:1.0 . -f Dockerfile
