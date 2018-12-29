@@ -1,9 +1,9 @@
 # URL Shortener DEMO using GO
 
-> Database: MongoDB
-> Use Recaptcha v3 for robot checking
-> Use gRPC for services internal communication
-> Use Docker to launch microservices
+- Database: MongoDB
+- Use Recaptcha v3 for robot checking
+- Use gRPC for services internal communication
+- Use Docker to launch microservices
 
 ### To-Do
 - [x] Build prototype
@@ -20,22 +20,22 @@
 
 ### steps:
 
-build urlshortener docker image:
+Build urlshortener docker image:
 ```
 docker build -t urlshortener:1.0 . -f Dockerfile
 ```
 
-pull mongodb docker image:
+Pull mongodb docker image:
 ```
 docker pull mongo
 ```
 
-run mongodb on docker container:
+Run mongodb on docker container:
 ```
 docker run -p 27017:27017 -v $PWD/db:/data/db -d --name mongo_container mongo
 ```
 
-run urlshortener on docker container:
+Run urlshortener on docker container:
 ```
 docker run -p 8080:8080 -it --link mongo_container:mongo urlshortener:1.0 <reCaptcha public key> <reCaptcha private key>
 ```
