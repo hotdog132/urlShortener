@@ -36,6 +36,7 @@ RUN apk add ca-certificates
 COPY --from=server_builder /app/main /app/
 COPY docker_entry.sh /app
 COPY config.json /app
+COPY tpl /app/tpl
 WORKDIR /app
 ENTRYPOINT ["sh", "/app/docker_entry.sh"]
 # CMD ["./docker_entry.sh"]
