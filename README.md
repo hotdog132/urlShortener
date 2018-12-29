@@ -5,12 +5,13 @@
 > Use gRPC for services internal communication
 > Use Docker to launch microservices
 
-### ToDo
+### To-Do
 - [x] Build prototype
 - [x] Recaptcha v3
 - [] Shorten URL algorithm
 - [x] Docker settings
 - [] gRPC communication
+- [] Add React for building front-end components
 
 ### Addition
 - [] Switch DB to Redis
